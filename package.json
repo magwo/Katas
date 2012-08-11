@@ -1,0 +1,20 @@
+{
+  "name": "Katas",
+  "author": "",
+  "version": "1.0.0",
+  "main": "all.coffee",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:magwo/Katas.git"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {
+    "logme": "*",
+    "moment": "1.6.2"
+  },
+  "devDependencies": {
+    
+  }
+}
