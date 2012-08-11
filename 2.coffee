@@ -1,11 +1,11 @@
 logger = require "logme"
 
 chop_iterative = (e, elements) ->
-  logger.debug "Finding #{e} in", elements
+  logger.info "Iterative finding #{e} in", elements
   left = 0
   right = Math.max(0, elements.length - 1)
   while true
-    i = left + Math.floor (right - left) / 2
+    i = left + Math.floor((right - left) / 2)
     logger.debug "left #{left} right #{right} i #{i}"
     if elements[i] == e
       logger.debug "#{i} contains #{e}"
@@ -20,6 +20,25 @@ chop_iterative = (e, elements) ->
     else
       throw "Wat"
 
+chop_recursive = (e, elements) ->
+  logger.info "Recursive finding #{e} in", elements
+
+  find = (e, offset, elements) ->
+    logger.debug "elements", elements
+    middle = Math.floor((elements.length) / 2)
+    logger.debug "Middle is #{middle}"
+    if elements[middle] == e
+      return offset + middle
+    else if elements.length <= 1
+      return -1
+    else if e < elements[middle]
+      return find e, offset, elements[0...middle]
+    else if e > elements[middle]
+      offset = middle + 1
+      return find e, offset, elements[middle+1..]
+    else
+      throw "Unexpected situation: #{JSON.stringify elements}"
+  return find e, 0, elements
 
 
 chop = (e, elements, algorithm) ->
@@ -28,10 +47,9 @@ chop = (e, elements, algorithm) ->
 
 assert_equal = (v0, v1) ->
   if v0 == v1
-    console.log "..."
+    #console.log "..."
   else
     logger.error "Assert failed: #{v0} is not equal to #{v1}"
-    throw "OMG"
     return false
 
 test_chop = (algorithm) ->
@@ -63,4 +81,8 @@ test_chop = (algorithm) ->
 # Disable debug normally
 logger.debug = (args...) ->
   0
+
+logger.info "Testing recursive..."
+test_chop(chop_recursive)
+logger.info "Testing iterative..."
 test_chop(chop_iterative)
